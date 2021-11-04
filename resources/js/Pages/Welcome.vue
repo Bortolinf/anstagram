@@ -22,7 +22,7 @@
                         Error
                     </div>
                 </div>
-                <button v-if="text.length > 0 && image != null" class="w-full my-3 mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600">
+                <button @click="createPost" v-if="text.length > 0 && image != null" class="w-full my-3 mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600">
                     Publicar</button>
             </div>
         </modal>
@@ -41,7 +41,8 @@
                 showModal: false,
                 url: null,
                 image: null,
-                text: ''
+                text: '',
+                posts: []
             }
         },
         components:{
@@ -59,6 +60,26 @@
             },
             selectImage(){
                 document.getElementById('image').click()
+            },
+            async createPost(){
+                const formData = new FormData()
+                formData.append('image', this.image)
+                formData.append('text', this.text)
+                await axios.post('/create-post', formData, {
+                    headers: {
+                        'Content-Type':'multipart/form-data'
+                    }
+                }).then((response) => {
+                    this.posts.unshift(response.data)
+                    this.resetData()
+                })
+            },
+            resetData(){
+                this.showModal = false,
+                this.url = null,
+                this.image = null,
+                this.text = '',
+                this.posts = []
             }
         }
     }

@@ -21302,10 +21302,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
-/* harmony import */ var _Components_PostComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/PostComponent */ "./resources/js/Components/PostComponent.vue");
-/* harmony import */ var _Jetstream_Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/Modal */ "./resources/js/Jetstream/Modal.vue");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var _Components_PostComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/PostComponent */ "./resources/js/Components/PostComponent.vue");
+/* harmony import */ var _Jetstream_Modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/Modal */ "./resources/js/Jetstream/Modal.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 
 
@@ -21316,12 +21324,13 @@ __webpack_require__.r(__webpack_exports__);
       showModal: false,
       url: null,
       image: null,
-      text: ''
+      text: '',
+      posts: []
     };
   },
   components: {
-    PostComponent: _Components_PostComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Modal: _Jetstream_Modal__WEBPACK_IMPORTED_MODULE_3__["default"]
+    PostComponent: _Components_PostComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Modal: _Jetstream_Modal__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   methods: {
     changeStateShowCreatePost: function changeStateShowCreatePost() {
@@ -21334,6 +21343,38 @@ __webpack_require__.r(__webpack_exports__);
     },
     selectImage: function selectImage() {
       document.getElementById('image').click();
+    },
+    createPost: function createPost() {
+      var _this = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var formData;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                formData = new FormData();
+                formData.append('image', _this.image);
+                formData.append('text', _this.text);
+                _context.next = 5;
+                return axios.post('/create-post', formData, {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                }).then(function (response) {
+                  _this.posts.unshift(response.data);
+                });
+
+              case 5:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
+    },
+    resetData: function resetData() {
+      this.showModal = false, this.url = null, this.image = null, this.text = '', this.posts = [];
     }
   }
 });
@@ -26021,10 +26062,6 @@ var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 /* HOISTED */
 );
 
-var _hoisted_10 = {
-  key: 0,
-  "class": "w-full my-3 mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600"
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_post_component = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("post-component");
 
@@ -26077,7 +26114,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         }
       }, null, 32
       /* HYDRATE_EVENTS */
-      )]), _hoisted_9]), $data.text.length > 0 && $data.image != null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_10, " Publicar")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
+      )]), _hoisted_9]), $data.text.length > 0 && $data.image != null ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+        key: 0,
+        onClick: _cache[4] || (_cache[4] = function () {
+          return $options.createPost && $options.createPost.apply($options, arguments);
+        }),
+        "class": "w-full my-3 mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600"
+      }, " Publicar")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])];
     }),
     _: 1
     /* STABLE */
