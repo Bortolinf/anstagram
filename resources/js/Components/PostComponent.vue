@@ -3,18 +3,17 @@
         <header class="flex flex-start">
             <div>
                 <a href="#" class="cursor-pointer m-4 flex items-center text-sm outline-none focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                    <img src="https://images.pexels.com/photos/3460478/pexels-photo-3460478.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="h-9 w-9 rounded-full object-cover"
-                    alt="usuario" />
+                    <img :src="post.user.profile_photo_url" class="h-9 w-9 rounded-full object-cover"
+                    :alt="post.user.name" />
                     <div>
-                        <p class="block ml-2 font-bold">Clark J</p>
+                        <p class="block ml-2 font-bold">{{ post.user.nick_name }}</p>
                         <span class="block ml-2 text-xs text-gray-600">5 minutes</span>
                     </div>
                 </a>
             </div>
         </header>
         <img class="w-full max-w-full min-w-full"
-        src="https://images.pexels.com/photos/5797991/pexels-photo-5797991.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
-            alt="post">
+        :src="post.image_path" :alt="post.description">
 
         <div class="px-6 pt-4">
             <div class="mb-2">
@@ -30,7 +29,7 @@
                         </svg>
                     </span>
                 </div>
-                <span class="text-gray-600 text-sm font-bold">1,300 Likes</span>
+                <span class="text-gray-600 text-sm font-bold">{{ post.countlikes }} Likes</span>
             </div>
             <div class="">
                 <div class="text-sm mb-2 flex flex-start items-center">
@@ -46,15 +45,15 @@
                         </span>
                     </p>
                 </div>
-                <a class="text-gray-400 text-sm cursor-pointer font-semibold">23 comments</a>
+                <a class="text-gray-400 text-sm cursor-pointer font-semibold">{{ post.countcomments }} comments</a>
             </div>
 
         </div>
 
         <div class="px-6 pt-4 pb-3">
             <div class="flex items-start">
-                <input class="w-full resize-none outline-none appearance-none" aria-label="Agrega un comentario..." placeholder="Agrega un comentario..."  autocomplete="off" autocorrect="off" style="height: 36px;" />
-                <button class="mb-2 focus:outline-none border-none bg-transparent text-blue-600">Publicar</button>
+                <input v-model="textComment" class="w-full resize-none outline-none appearance-none" aria-label="Agrega un comentario..." placeholder="Agrega un comentario..."  autocomplete="off" autocorrect="off" style="height: 36px;" />
+                <button v-if="textComment.length > 0" class="mb-2 focus:outline-none border-none bg-transparent text-blue-600">Publicar</button>
             </div>
         </div>
     </div>
@@ -65,8 +64,9 @@
 export default {
     data() {
         return{
-
+            textComment: ''
         }
     },
+    props:['post']
 }
 </script>

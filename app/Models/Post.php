@@ -20,10 +20,10 @@ class Post extends Model
 
     public $appends = ['countComments', 'countLikes'];
 
-    public function getCountComments(){
+    public function getCountCommentsAttribute(){
         return $this->comments->count();
     }
-    public function getCountLikes(){
+    public function getCountLikesAttribute(){
         return $this->likes->count();
     }
 
@@ -49,7 +49,7 @@ class Post extends Model
 
         $post = (new static)::create([
             'image_path' => $url,
-            'decription' => $request->text,
+            'description' => $request->text,
             'date_post' => Carbon::now(),
             'user_id' => Auth::id(),
         ]);
@@ -59,6 +59,20 @@ class Post extends Model
             'comments',
             'likes'
         ])->find($post->id);
+    }
+
+    public static function getPost($id){
+        return (new static)::with([
+            'user',
+            'comments' => function($query) {
+                $query->with('user:id,name,nick_name,profile_photo_path');
+            },
+            'likes'
+        ])
+        ->where('user_id', $id)
+        ->orWhereIn('user_id', Follower::select('user_id')->where('follower_id', $id)->get())
+        ->orderBy('created_at', 'desc')
+        ->get();
     }
 
 }

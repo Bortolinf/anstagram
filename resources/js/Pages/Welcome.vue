@@ -1,8 +1,13 @@
 <template>
     <div class="max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl w-full">
         <button @click="changeStateShowCreatePost" class="w-full mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600">Incluir Publicação</button>
-        <post-component></post-component>
 
+        <div v-if="posts.length > 0">
+            <post-component v-for="(post, index) in posts" :key="index"
+            :post="post"></post-component>
+        </div>
+
+        <div v-if="posts.length == 0" class="tex-3x1">Não existem publicações</div>
         <modal :show="showModal" @close="changeStateShowCreatePost">
             <div class="p-5">
                 <div class="">
@@ -19,7 +24,7 @@
                         <input @change="filechange" id="image" type="file" name="image" accept="image/gif,image/jpeg,image/png,image/jpg" style="display:none">
                     </div>
                     <div class="text-red-500 p-2 mt-5">
-                        Error
+                        {{ this.error }}
                     </div>
                 </div>
                 <button @click="createPost" v-if="text.length > 0 && image != null" class="w-full my-3 mb-5 text-center bg-blue-500 rounded text-white py-2 outline-none focus:outline-none hover:bg-blue-600">
@@ -42,7 +47,8 @@
                 url: null,
                 image: null,
                 text: '',
-                posts: []
+                posts: [],
+                error: null
             }
         },
         components:{
@@ -50,6 +56,13 @@
             Modal
         },
         methods: {
+            async getPosts() {
+                await axios.get('/list-posts')
+                .then(response => {
+                    this.posts = response.data
+                })
+            },
+
             changeStateShowCreatePost(){
                 this.showModal = !this.showModal
             },
@@ -72,15 +85,25 @@
                 }).then((response) => {
                     this.posts.unshift(response.data)
                     this.resetData()
+                }).catch(error => {
+                    if(error.response.status === 422){
+                        this.error = error.response.data.errors.image[0]
+
+                        setTimeout(()=> {
+                            this.error = null
+                        }, 5000)
+                    }
                 })
             },
             resetData(){
                 this.showModal = false,
                 this.url = null,
                 this.image = null,
-                this.text = '',
-                this.posts = []
+                this.text = ''
             }
+        },
+        created(){
+            this.getPosts()
         }
     }
 </script>

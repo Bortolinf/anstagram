@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\PostController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -26,6 +27,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/search/{nick_name}', [SearchController::class,'search'])->name('search');
+
+    //posts
+    Route::post('/create-post', [PostController::class,'createPost'])->name('create-post');
+    Route::get('/list-posts', [PostController::class,'getPosts'])->name('list-posts');
     
 });
 
